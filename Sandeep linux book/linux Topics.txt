@@ -1,0 +1,24 @@
+1. Booting Process
+2. Terminals
+3. Text Editors
+4. Commands
+5. User & Group management
+6. User & Group acesss permissions (SU & SUDO )
+7. File & Directory Permissions
+8. Local package configuration
+	- RPM
+	- YUM & DNF
+	- Epel
+9. Controlling services and daemons
+10. Storage Management
+	- Mounting and unmounting file systems
+	- Partitioning and formatting disks
+	- Creating and configuring file systems
+	- LVM
+	- RAID
+11. rSYNC 
+12. Backup
+13. Patching
+14. Network & Firewall
+15. Crontab
+16. Server configuration

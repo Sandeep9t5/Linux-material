@@ -1,0 +1,646 @@
+****************************************************************************************************************************
+
+Network Configuration     ( BY Linux Wale )
+===============================================
+
+RHEL -8    Machine-1
+
+IP             ==>  192.168.0.10
+SUBNET         ==>  255.255.255.0
+machine name   ==>  station10.example.com
+
+==================================================
+
+RHEL -8    Machine-2
+
+IP             ==>  192.168.0.20
+SUBNET         ==>  255.255.255.0
+machine name   ==>  station20.example.com
+
+
+*****************************************************************************************************************************
+
+Network Management
+===================
+
+         
+    RHEL -6                                                 		RHEL-7  
+
+1. ifconfig					                         1. ifconfig
+   hostname							            hostname / hostnamectl
+
+2. Permanent file of hostname    					2. Permanent file of hostname
+ 					
+cat /etc/sysconfig/network     				                    cat /etc/hostname
+					   
+
+3. Interface name or lan card or NIC name                                3. Interface name or lan card or NIC name
+      (default)                                                                 (default)
+      
+
+lo ==>loopback ==>127.0.0.1                                                lo ==>loopback ==>127.0.0.1
+
+eth0   eth1  eth2                                                             ens33   or   ens160
+						   
+
+
+
+Types of ip changing methods                                             Types of ip changing methods 
+=============================                                           =============================
+
+
+1. command line	==>  setup						        1. command line ==>  nmcli or  nmtui
+
+2. file method 									2. file method 
+  
+                  cat /etc/sysconfig/network-scripts/ifcfg-eth0   or ifcfg-ens33  or  ifcfg-ens160 
+
+
+
+Command Method
+------------------
+nmcli   ==>  network manager commandline interface 
+nmtui   ==>  network manager text user interface
+
+
+
+
+
+
+				con-name  ==> choice
+					      ens33  or xyz
+					
+				/etc/sysconfig/network-scripts/ifcfg-ens33   or ifcfg-xyz
+
+
+nmcli
+
+
+
+
+
+				ifname  ==>  ens33
+
+
+
+
+
+nmcli connection show
+nmcli connection delete ens33     or      rm  /etc/sysconfig/network-scripts/ifcfg-ens33
+nmcli connection add
+
+
+
+****************************************************************************************************************************
+
+
+By Deleting network file and adding new file
+By Modifying in the existing file
+
+
+
+
+1A.commandline Method   (Deleting network file and adding new file)
+=====================================================================
+
+Machine-1 (By commandline method)
+--------------------------------------
+
+Changing Hostname
+-----------------
+# hostname
+# hostnamectl
+# hostnamectl    set-hostname   station10.example.com     (by commandline )
+		
+# cat /etc/hostname
+# exit
+# hostname
+
+
+Adding hosts in the file
+----------------------------
+
+# vim  /etc/hosts    
+
+192.168.0.10      station10.example.com
+192.168.0.20      station20.example.com
+
+
+
+
+=================================================
+Steps-
+1.find lancard name
+2.check filename
+3.delete   ==>  add      / modify
+==================================================
+
+#ifconfig
+#cat  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=no
+
+
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ---       (lancard up  nahi hai)
+(filename)								   (device name)
+
+
+
+Deleting network file
+======================
+#nmcli connection delete ens33
+#nmcli connection show
+
+
+BY Adding new network file
+===============================
+#nmcli connection add   con-name  ens33(choice)   ifname  enss33(no choice)    type  ethernet   autoconnect  yes             ip4  192.168.0.10/24
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+
+#cat  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.0.10
+PREFIX=24
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=yes
+
+
+
+Machine-2
+(commandline method)
+==============================
+
+
+Changing Hostname
+-----------------
+# hostname
+# hostnamectl
+# hostnamectl    set-hostname   station20.example.com     (by commandline )
+		
+# cat /etc/hostname
+# exit
+# hostname
+
+
+Adding hosts in the file
+----------------------------
+
+# vim  /etc/hosts    
+
+192.168.0.10      station10.example.com
+192.168.0.20      station20.example.com
+
+#ifconfig
+
+#nmcli connection show
+
+ens160            sabkashkjefkefhjkefhwejkehhfw           ethernet              160       (lancard up hai)
+(filename)								   (device name)
+
+
+
+Deleting network file
+======================
+#nmcli connection delete ens160
+#nmcli connection show
+
+
+Adding new network file
+=======================
+#nmcli connection add   con-name  xyz(choice)   ifname  enss160(no choice)    type  ethernet   autoconnect  yes             ip4  192.168.0.20/24
+
+#nmcli connection show
+xyz           sabkashkjefkefhjkefhwejkehhfw           ethernet               ens160      (lancard up hai)
+(filename)								   (device name)
+
+
+
+#cat  /etc/sysconfig/network-scripts/ifcfg-xyz
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.0.20
+PREFIX=24
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=xyz
+UUID=
+DEVICE=ens160
+ONBOOT=yes
+
+
+***************************************************************************************************************************
+
+
+2.FILE Method
+==========================
+
+Machine-1
+(File method)
+=====================
+
+#ifconfig
+#vim  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.0.100
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=no
+
+#if down ens33
+#if up ens33
+
+Machine-2
+(File method)
+=============================
+
+#ifconfig
+#vim  /etc/sysconfig/network-scripts/ifcfg-ens160
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.0.200
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=160
+UUID=
+DEVICE=160
+ONBOOT=no
+
+#if down ens160
+#if up ens160
+
+*****************************************************************************************************************************
+
+2A.commandline Method   (BY Modifying in the network file )
+==========================================================
+
+Machine-1
+(commandline method)
+--------------------------------
+
+#nmcli connection show
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+#nmcli connection modify ens33 ipv4.addresses  192.168.0.50/24     -------------------> modification
+
+
+#nmcli connection down ens33
+#nmcli connection up ens33
+#nmcli connection show
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+#ifconfig
+
+***************************************************************************************************************************						
+DHCP IP cofiguration
+
+How to assign ip using DHCP Server
+======================================
+1.Command based
+2.File based
+
+
+
+1.commandline Method   (Deleting network file and adding new file)
+===================================================================
+
+Machine-1
+(commandline method)
+--------------------------
+
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+
+#nmcli connection delete ens33
+
+#nmcli connection add   con-name  ens33(choice)   ifname  enss33(no choice)    type  ethernet   autoconnect  yes             
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)
+
+#ifconfig
+
+
+#cat  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp   ------------------------------------DHCP
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=yes
+
+2.File based
+========================
+
+
+#vim  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp   -----------------------------------(change none to DHCP in the file directly)
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=yes
+
+#nmcli ifdown ens33
+#nmcli ifup ens33
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+#ifconfig
+
+
+
+
+***************************************************************************************************************************
+
+
+
+How to create multiple profile of any single interface
+==========================================================
+
+
+
+				file (static ip)
+
+lancard    
+
+
+				file (dhcp ip)
+
+
+1.Commandline method
+======================
+
+#ifconfig
+#nmcli connection add   con-name  internet(choice haiapna rkhne ka)   ifname  enss160(no choice)    type  ethernet   autoconnect  yes 
+
+#nmcli connection show
+
+
+xyz           sabkashkjefkefhjkefhwejkehhfw           ethernet               ens160      (lancard up hai)
+(filename)								   (device name)
+
+internet           sabkashkjefkefhjkefhwejkehhfw           ethernet           -----      (lancard up hai)
+(filename)								   (device name)
+
+
+#nmcli connection show --active
+xyz           sabkashkjefkefhjkefhwejkehhfw           ethernet               ens160      (lancard up hai)
+(filename)								   (device name)
+
+#nmcli connection up internet
+
+#nmcli connection show
+
+internet           sabkashkjefkefhjkefhwejkehhfw           ethernet          ens160      (lancard up hai)
+(filename)								   (device name)
+xyz           sabkashkjefkefhjkefhwejkehhfw           ethernet               -----      (lancard up  nahi hai)
+(filename)								   (device name)
+
+#ifconfig
+#ping google.com
+#nmcli connection delete internet
+
+
+2.file method
+==============
+
+
+
+
+
+How to ping HOST machine to Virtuals MACHINE
+
+Machine-1
+==================
+
+vm network adaptor  =>  setting => custom => VMnet8 (NAT)   => OK =>  vm network adaptor  => CONNECT
+
+Machine-2
+==================
+
+vm network adaptor  =>  setting => custom => VMnet8 (NAT)   => OK =>  vm network adaptor  => CONNECT
+
+
+
+Host machine
+=============
+
+Right click near wifi  => network & internet settings  =>  Advance Network setting  => VMware Network Adaptor VMnet8  =>more adaptor options =>Internet protocol version 4 (TCP/IPv4)  => properties =>  192.168.0.50  => ok => close => disable => enable
+
+#ping 192.168.0.10
+
+
+
+
+
+To check Gateway  
+# ip route
+#route -n
+#netstat -n  -r
+
+To check dns
+
+#cat /etc/resolv.conf
+
+
+
+****************************************************************************************************************************
+
+
+Providing modem ranges ip, subnet ,gateway ,dns 
+=====================================================
+
+1.Commandline
+================
+
+
+#nmcli connection show
+#nmcli connection delete ens33
+
+#nmcli connection add   con-name  ens33(choice)   ifname  enss33(no choice)    type  ethernet   autoconnect  yes             ip4  192.168.225.170/24   gw4  192.168.225.1  ipv4.dns   192.168.225.1 
+
+#nmcli connection show
+#ifconfig
+#ping google.com
+
+adding 1 more dns
+-------------------
+
+#nmcli connection modify ens33 +ipv4.dns   8.8.8.8
+
+2.File method
+============
+
+#vim /etc/sysconfig/network-scripts/ifcfg-eth0   or ifcfg-ens33  or  ifcfg-ens160 
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.225.170
+NETMASK=255.255.255.0
+GATEWAY=192.168.225.1
+DNS1=192.168.225.1
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=yes
+
+
+#vim /etc/resolv.conf
+
+#if down ens33
+#if up ens33
+#ifconfig
+#ping google.com
+
+
+**************************************************************************************************************************
+**************************************************************************************************************************
+***************************************************************************************************************************
+
+
+
+IPv4 Configuration  ( BY Vishesh Malik )
+===================       
+
+RHEL-6   setup
+RHEL-7   nmcli
+
+
+Method -1 ( nmcli command )
+============================
+
+nmcli connection show
+nmcli connection delete ens33
+nmcli connection show
+
+nmcli connection add con-name vishu ifname ens033 type ethernet autoconnect yes ip4 '192.168.1.100/24'
+nmcli connection show
+
+ifconfig
+
+disable lan card    ifdown ens033
+enable lan card    ifup ens033
+
+nmcli connection modify  vishu ipv4.addresses 192.168.1.200/24
+ifconfig
+ifdown ens033
+ifup ens033
+ifconfig
+
+Method -2 ( ip configuration file )
+=======================================
+
+nmcli connection show
+vim /etc/sysconfig/network-scripts/ifcfg-ens033
+
+BOOTPROTO=static
+ONBOOT=yes
+IPADDR=192.168.1.300
+NETMASK=255.255.255.0
+
+:se nu
+
+ifconfig
+ifdown ens033
+ifup ens033
+ifconfig
+
+
+
+
+****************************************************************************************************************************
+

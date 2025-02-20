@@ -1,0 +1,83 @@
+RAID5
+====================
+
+[root@localhost~]# cd /
+[root@localhost/]# fdisk -l
+[root@localhost/]# lsblk
+
+[root@localhost/]# mdadm -E  /dev/sd[b-e]1
+[root@localhost/]# mdadm --create  /dev/md5  --level=5 --raid-devices=3  /dev/sd[b-d]1
+[root@localhost/]# mdadm  -D /dev/md5
+
+
+Formatting
+------------
+[root@localhost/]# mkfs.xfs  /dev/md5    
+
+
+
+Creating directory for the mounting
+----------------------------------------
+[root@localhost/]# mkdir /raid5
+[root@localhost/]# ls
+[root@localhost/]# blkid  /dev/md5
+
+Permanent mounting
+--------------------
+
+[root@localhost/]# vim  /etc/fstab
+
+UUID=1DD09635-4181-4260-836B-8D783FCDA10d     /raid     xfs   defaults   00
+or
+/dev/md5
+
+:wq
+
+
+[root@localhost/]# mount -a
+[root@localhost/]# df-Th
+[root@localhost/]# lsblk
+
+
+
+
+[root@localhost/]# df-Th
+[root@localhost/]# cd /raid5/
+[root@localhost raid5]# touch "vishesh malik"
+[root@localhost raid5]# ls
+[root@localhost raid5]# cd /
+
+
+
+Adding new disk
+---------------------
+[root@localhost/]# mdadm --manage --add  /dev/sde1
+[root@localhost/]# mdadm  -D /dev/md5
+
+
+
+Failing a disk to check RAID
+------------------------------
+[root@localhost/]# mdadm --manage --fail  /dev/md5      /dev/sdc1
+[root@localhost/]# mdadm  -D /dev/md5
+[root@localhost/]# mdadm  -D /dev/md5
+[root@localhost/]# mdadm  -D /dev/md5
+[root@localhost/]# mdadm  -D /dev/md5
+[root@localhost/]# mdadm  -D /dev/md5
+
+
+[root@localhost/]#  ls /raid
+vishesh malik
+
+
+
+
+
+
+
+
+
+
+
+
+

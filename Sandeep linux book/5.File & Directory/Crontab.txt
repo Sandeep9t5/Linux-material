@@ -1,0 +1,32 @@
+[root@localhost~]# crontab -l
+no crontab for root
+[root@localhost~]# crontab -u preet -l
+no crontab for preet
+
+[root@localhost~]# vim  /etc/crontab
+
+[root@localhost~]# touch vishesh.sh
+[root@localhost~]# chmod 777  vishesh.sh
+[root@localhost~]# ll vishesh.sh
+-rwxrwxrwx. 1  root root  0  My 26  19:45  vishesh.sh
+
+[root@localhost~]# vim vishesh.sh
+
+mkdir  /Ranvijay{1..5}
+touch  /yatharth{1..5}
+
+[root@localhost~]# crontab -e       to schedule the cron service to current user
+
+55  19 * * *  /vishesh.sh*
+
+[root@localhost~]# crontab -l
+55  19 * * *  /vishesh.sh*
+
+
+[root@localhost~]# systemctl start crond
+[root@localhost~]# systemctl enable crond
+[root@localhost~]# systemctl status crond
+
+[root@localhost~]# ls /
+
+[root@localhost~]# crontab -e       to delete the scheduled  cron service to current user

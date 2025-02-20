@@ -1,0 +1,200 @@
+Logical Volume Manager
+==========================
+
+Creating Partition on 1st Disk
+
+[root@localhost~]# fdisk /dev/sda
+                    : n
+                    : p
+                    : 30g
+                    : p
+                    : t
+                    : 
+                    : 8e
+                    : w  
+[root@localhost~]# partprobe /dev/sda 
+
+
+
+Creating Partition on 2nd Disk
+
+[root@localhost~]# fdisk /dev/sdb
+                    : n
+                    : p
+                    : 50g
+                    : p
+                    : t
+                    : 
+                    : 8e
+                    : p
+                    : w  
+[root@localhost~]# partprobe /dev/sdb 
+
+
+Creating Partition on 3rd Disk
+
+[root@localhost~]# fdisk /dev/sdc
+                    : n
+                    : p
+                    : 30g
+                    : p
+                    : t
+                    : 
+                    : 8e
+                    : p
+                    : w  
+[root@localhost~]# partprobe /dev/sdc 
+
+
+Creating PV
+=============
+[root@localhost~]# fdisk -l
+[root@localhost~]# pvs
+[root@localhost~]# pvdisplay
+[root@localhost~]# pvcreate  /dev/sda4  /dev/sdb1  /dev/sdc1
+[root@localhost~]# pvs
+
+
+Creating VG
+=============
+[root@localhost~]# vgs
+[root@localhost~]# vgdisplay
+[root@localhost~]# vgcreate  myvg1  /dev/sda4  /dev/sdb1  /dev/sdc1
+[root@localhost~]# vgs
+
+Extending VG
+----------------
+[root@localhost~]# vgextend myvg1  /dev/sdb2   (kis pv ko use karke aap VG extend karna chahte hai)
+[root@localhost~]# vgs
+
+
+Renaming VG
+------------
+[root@localhost~]# vgrename  myvg1   vishuvg
+[root@localhost~]# vgs
+
+
+Creating LV
+============
+
+[root@localhost~]# vgs
+[root@localhost~]# lvs
+[root@localhost~]# lvdisplay
+[root@localhost~]# lvcreate  -L +10G  -n mylv1  /dev/vishuvg
+[root@localhost~]# lvs
+[root@localhost~]# vgs
+[root@localhost~]# lvs
+
+Formatting LV
+==============
+[root@localhost~]# mkfs.ext4  /dev/vishuvg/mylv1
+
+Creating more LV
+=================
+[root@localhost~]# Lvcreate  -L  +20G  -n mylv2  /dev/vishuvg
+[root@localhost~]# vgs
+[root@localhost~]# mkfs.ext4  /dev/vishuvg/mylv2                 (formatting 2nd lv)
+[root@localhost~]# lvs
+
+
+Mounting
+==========
+
+[root@localhost~]# mkdir  lv1
+[root@localhost~]# mkdir  lv2
+[root@localhost~]# ls
+
+
+1.Temporary mounting
+
+[root@localhost~]# mount /dev/vishuvg/mylv1    lv1
+[root@localhost~]# mount /dev/vishuvg/mylv2    lv2
+
+[root@localhost~]# df-Th
+
+2.Permanent Mounting
+
+[root@localhost~]# vim  /etc/fstab
+
+/dev/vishu/mylv1     /lv1   ext4    defaults   00
+/dev/vishu/mylv1     /lv1   ext4    defaults   00
+
+:wq
+
+[root@localhost~]# mount -a
+[root@localhost~]# lvs
+[root@localhost~]# df-Th
+
+
+
+Extending LV
+----------------
+LV1
+[root@localhost~]#  lvextend  -L +15G  /dev/vishu/mylv1
+[root@localhost~]# df-Th
+[root@localhost~]# e2fsck -f /dev/vishu/mylv1
+
+[root@localhost~]# umount lv1
+[root@localhost~]# vim  /etc/fstab
+remove entry
+[root@localhost~]# mount -a
+[root@localhost~]# df-Th
+[root@localhost~]# e2fsck -f /dev/vishu/mylv1
+[root@localhost~]# resize 2fs /dev/vishu/mylv1
+[root@localhost~]# lvs
+
+
+LV2
+[root@localhost~]# df-Th
+[root@localhost~]# umount lv2
+[root@localhost~]# df-Th
+[root@localhost~]# vim  /etc/fstab
+remove entry
+[root@localhost~]# mount -a
+[root@localhost~]# lvs
+
+[root@localhost~]#  lvextend  -L +30G  /dev/vishu/mylv2
+[root@localhost~]# xfs-growfs /dev/vishu/mylv2
+[root@localhost~]# lvs
+
+
+Reducing LV size
+-----------------
+[root@localhost~]# e2fsck -f /dev/vishu/mylv1
+[root@localhost~]# resize 2fs -p  /dev/vishu/mylv1  10G
+[root@localhost~]# lvreduce  -L -5G /dev/vishu/mylv1
+[y/n] : y
+[root@localhost~]# lvs
+
+
+How to remove LV,VG & PV
+========================
+Remove LV
+-----------
+[root@localhost~]# lvs
+[root@localhost~]# lvremove  /dev/vishuvg/mylv1
+[y/n] : y
+[root@localhost~]# lvremove  /dev/vishuvg/mylv2
+[y/n] : y
+
+Remove VG
+------------
+[root@localhost~]# vgs
+[root@localhost~]# vgremove  /dev/vishuvg
+[root@localhost~]# vgs
+
+Remove PV
+------------
+[root@localhost~]# pvs
+[root@localhost~]# pvremove /dev/sa2
+[root@localhost~]# pvremove /dev/sab1
+[root@localhost~]# pvremove /dev/sac1
+[root@localhost~]# pvs
+
+
+
+
+
+
+
+

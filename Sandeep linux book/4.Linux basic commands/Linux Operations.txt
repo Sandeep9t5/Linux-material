@@ -1,0 +1,191 @@
+How to read content of any text file
+
+# cat  <options>  <filename>
+# tac  <filename>
+
+[root@localhost~]# cat  /etc/passwd  
+[root@localhost~]# cat -n  /etc/passwd                      ------  display with line numbers
+[root@localhost~]# cat -b  /etc/passwd                      ------  ignore the blank line 
+[root@localhost~]# cat  /etc/passwd   etc/crontab           ------  reading multiple files
+[root@localhost~]# tac  /etc/passwd                         ------  reverse    (-n  -b  wont work here with tac)
+
+Concatinating the files
+
+[root@localhost~]# cat  /tmp/test-1   /tmp/test-2    >   /tmp/third-file
+[root@localhost~]# cat  /tmp/third-file
+
+[root@localhost~]# cat  /tmp/test-3       >>     /tmp/third-file
+[root@localhost~]# cat  /tmp/third-file
+
+[root@localhost~]# rm -f /tmp/test-1   /tmp/test-2  /tmp/third-file  
+
+
+[root@localhost~]# cat  /etc/passwd   /etc/group    >   /new-backup
+[root@localhost~]# cat  /new-backup
+[root@localhost~]# cat  /etc/shadow   >>   /new-backup
+[root@localhost~]# cat  /new-backup
+===========================================================================================================================
+wc  ===> word count
+
+It is use to count number of characters and number of word available in any file or any command outputs.
+
+# wc  <options>  <filename>
+
+[root@localhost~]# wc  /etc/passwd                          ------  word count
+
+50        100      2965      /etc/passwd
+line    words    character
+
+[root@localhost~]# wc  -l   /etc/passwd
+[root@localhost~]# wc  -w  /etc/passwd
+[root@localhost~]# wc  -c /etc/passwd
+[root@localhost~]# wc -w  -l   /etc/passwd
+[root@localhost~]# wc - l /etc/passd  /etc/group
+51  /etc/passwd
+75  /etc/group
+126 total
+
+[root@localhost~]#  wc  - l  lscpu             ---- wrong
+[root@localhost~]#  lscpu  |  wc  -l           ---- correct
+
+==========================================================================================================================
+
+What is the use of ; symbol?
+It is use to run more than one commands in sequencing order.
+
+[root@localhost~]# date  cal     ( X )
+[root@localhost~]# date ; cal    ( correct  )
+
+[root@localhost~]# date ; cal ; dates ; echo "hello"
+[root@localhost~]# useradd deepak  ; passwd deepak
+[root@localhost~]# mkdir /redhat  ; touch /redhat/abc
+
+==========================================================================================================================
+
+What is the use of | symbol?
+
+command-1  |  command-2  |  command-3
+
+[root@localhost~]#  cat /etc/passwd  |  wc  -l
+51
+
+[root@localhost~]# cat -n    lscpu          ----- wrong
+[root@localhost~]#  lscpu |  cat -n         ----- correct
+[root@localhost~]#  lscpu |  wc -l
+24
+
+[root@localhost~]#  lscpu |  cat             ----------  by default cat sare command pe chlta hai
+[root@localhost~]#  lscpu |  cat -n
+
+
+[root@localhost~]#  lsblk |  cat -n
+[root@localhost~]#  lsblk |  wc -l
+7
+
+[root@localhost~]#  lscpu   |  cat -n    | head -n 3
+[root@localhost~]#  lscpu   | head -n 3  |  cat -n
+
+
+[root@localhost~]# cat -n  /etc/passwd   |  head -n  5
+[root@localhost~]# cat -n  /etc/passwd   |  head -n  5     >   /temp/new-file   --- will create afile and put the o/p in it
+[root@localhost~]# cat -n  /temp/new-file
+
+
+[root@localhost~]#  lscpu   | head -n 3  |  cat -n         >   /temp/new-file
+[root@localhost~]# cat -n  /temp/new-file
+
+[root@localhost~]# cat -n  /etc/passwd   |  head -n  5     >>   /temp/new-file
+[root@localhost~]# cat -n  /temp/new-file
+
+===========================================================================================================================
+>      &    >>           ===>  there is no acknowledgement after the execution
+tee    &    tee -a       ===>  It  displays  the  output on the screen as well as stores it into the file 
+
+----------------------------------------------------------------------------------------------------------------------------
+
+>     It is use to store output of any command into any file.
+>>    It is use to append output of any command into any existing file
+
+[root@localhost~]# who  >  /tmp/user-info
+[root@localhost~]# cat /tmp/user-info
+
+[root@localhost~]# date >> /tmp/user-info 
+[root@localhost~]# cat /tmp/user-info
+
+
+[root@localhost~]# cat /tmp/user-info   >  /tmp/backup-file
+
+[root@localhost~]# cat /tmp/user-info
+[root@localhost~]# cat /tmp/backup-file
+
+
+File trunking  mens file ko kali krna
+
+[root@localhost~]# echo  >  /tmp/user-info                 this will have at least blank line in that file 
+[root@localhost~]# cat /tmp/user-info   
+
+[root@localhost~]# >  /tmp/user-info                        this will not have any line even the blank line also    
+[root@localhost~]# cat /tmp/user-info
+
+[root@localhost~]# > rm -f  /tmp/user-info                  this will delete that file
+
+
+tee &  tee-a
+
+tee  - 
+tee  -a 
+
+Normal method 
+[root@localhost~]# lsblk  >  /disk-info 
+[root@localhost~]# cat /disk-info
+[root@localhost~]# lscpu  | head  -n 3  >>  /disk-info 
+[root@localhost~]# cat /disk-info
+
+With tee command it is used to sav that content in that as well as displays on the screen at the same time
+
+[root@localhost~]# lsblk | tee   /disk-info
+[root@localhost~]# cat /disk-info
+
+[root@localhost~]# lscpu  | head -n 3 | tee -a   /disk-info                tee-a ------  append 
+[root@localhost~]# cat /disk-info
+
+[root@localhost~]# echo " this is my final report"  | tee  -a/disk-info
+[root@localhost~]# cat /disk-info 
+
+
+[root@localhost~]# date ; cal
+[root@localhost~]# date ; cal >  /info                                ( wrong )
+[root@localhost~]# cat /info
+
+[root@localhost~]# date > /info ; cal > /info                          ( correct )
+[root@localhost~]# cat /info
+
+
+[root@localhost~]# date  |  tee /info  ;  cal  |  tee -a /info
+[root@localhost~]# cat /info
+
+
+
+===========================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

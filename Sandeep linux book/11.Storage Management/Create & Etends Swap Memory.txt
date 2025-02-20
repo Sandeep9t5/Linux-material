@@ -1,0 +1,60 @@
+Swap Partition
+===============
+
+[root@localhost /]# fdisk -l
+
+[root@localhost /]# free -h
+
+
+Creating new partition
+=======================
+
+[root@localhost /]# fdisk  /dev/sda                           (kis hdisk me aap partition create krna chathe hai)
+
+command ( m for help ): m
+command ( m for help ): n                             ----->  To add new partition to the disk  (n- to add a new partition)
+select  ( default e ) : p				      (p- primary partition  &   e- extended partition)
+                      : press enter
+                      : press enter
+
+Last sector, +sectors or + size {K,M,G} : +10G
+command ( m for help ):p                              ----->  To check partition is created or not
+
+command ( m for help ): m
+                      : t                             ----->  changing the system id
+                      : 4                             ----->  partition number which needs to be changed
+                      : 82                            ----->  system id for swap   (82 for swap memory)
+                      : p                             ----->  To check partition is deleted or not
+                      : w                             ----->  To Save
+
+[root@localhost /]# partprobe  /dev/sda               ----->  To update the kernel info
+[root@localhost /]# free -h
+
+[root@localhost /]# swapon -s                         ------> (kaun sa partition use ho rha hai as a swap partition)
+
+[root@localhost /]# mkswap /dev/sda4                  ------> formatting swap file system          
+
+[root@localhost /]# swapon /dev/sda4                  ------> enabling swap
+
+[root@localhost /]# free -h
+
+[root@localhost /]# swapon -s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

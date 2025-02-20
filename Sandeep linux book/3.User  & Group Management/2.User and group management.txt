@@ -1,0 +1,188 @@
+User Management
+==================================
+
+Types of Linux Users
+
+1. Super user     -------------->  ( Root )             ---------->  user id ( 0 )
+2. System user    -------------->  ( Services )         ---------->  user id ( 1 - 999 )
+3. Normal user    -------------->  ( Standard user )    ---------->  user id ( 1000 - 60000 )
+
+Commands to Manage users in Linux
+
+1. useradd - To create users
+2. usermod - To manage user properties
+3. userdel - To delete user
+
+User information Files
+
+1. /root       	-  Super user's home directory
+2. /home       	-  Normal user's home directory
+3. /etc/passwd 	-  All user's Information
+4. /etc/shadow 	-  All user's Password & Policy information
+
+
+Practical
+===============
+
+1. To create user
+
+# useradd / adduser   sunny
+# passwd  sunny
+
+
+
+# cat -n  /etc/passwd 
+# grep -n sunny/etc/passwd
+
+root:x:0:0:root:/root:/bin/bash
+ : user full name : user's home directory : user login shell )
+
+sunny:x:1000:1000:sunny:/home/sunny:/bin/bash
+(user name : password pointer : user id : group id: user full name : user's home directory : user login shell )
+
+
+
+
+
+# grep -n sunny/etc/shadow
+
+sunny:$6$hsjshshshdhsjshhjsdlajiueirpqoiruqoehf.kljufljalfkyah.haugdauytdg:17897:0:99999:7:::
+( user name : password : no of days : minimum password days : maximum password days : warning days for passwd expire : account expire )
+
+
+2. To Modify
+
+vishu:x:1002:1002::/home/vishu:/bin/bash
+preet:x:1000:1000:preet:/home/preet:/bin/bash
+
+
+To add the full name to existing user
+
+# usermod -c "vishu malik"  vishu
+# grep -n sunny/etc/passwd
+vishu:x:1002:1002:vishu malik:/home/vishu:/bin/bash
+
+
+
+To modify the login shell of user
+
+# usermod -s /sbin/nologin  vishu
+# grep -n vishu/etc/passwd
+vishu:x:1002:1002:vishu malik:/home/vishu:/sbin/nologin
+
+
+
+To retrieve vishu users login shell
+
+# usermod -s /bin/bash  vishu
+# grep -n vishu/etc/passwd
+vishu:x:1002:1002:vishu malik:/home/vishu:/bin/bash
+
+
+
+To rename the user
+
+# usermod -l vishesh  vishu
+# grep -n vishu/etc/passwd
+vishesh:x:1002:1002:vishu malik:/home/vishu:/bin/bash
+
+
+To delete the user
+
+# userdel  vishesh 
+
+
+
+
+Group Management
+==================================
+
+
+
+Types of Linux Group
+
+1. Super group     -------------->  ( Root )             ---------->  user id ( 0 )
+2. System group    -------------->  ( Services )         ---------->  user id ( 1 - 999 )
+3. Normal group    -------------->  ( Standard group )    ---------->  user id ( 1000 - 60000 )
+
+Commands to Manage Group in Linux
+
+1. groupadd - To create new group
+2. groupmod - To manage group properties
+3. groupdel - To delete group
+
+Group information Files
+
+1. /etc/group	-  All group's Information
+2. /etc/gshadow -  All group's Password & Policy information
+
+
+
+
+
+Practical
+===============
+
+# cat /etc/group
+root:x:0:
+(user name : password pointer : group id )
+
+preet:x:1000;preet
+
+
+
+Whenever we create a user automatically with same name group is also created and user id as well as group id is also same
+# useradd vishu
+# passwd vishu
+# grep vishu /etc/group
+vishu:x:1001:
+
+#grep vishu /etc/passwd
+vishu:x:1001:1001::/home/vishu:/bin/bash
+
+#grep vishu /etc/gshadow
+vishu:!::
+
+
+
+
+
+
+
+
+To create group
+
+# groupadd malik
+
+# grep malik /etc/group
+malik:x:1002:
+
+To rename group
+
+# groupmod -n IBM malik
+# grep malik /etc/group
+# grep IBM /etc/group
+IBM:x:1002:
+
+To change group id
+
+# groupmod -g 2100 IBM
+# grep IBM /etc/group
+IBM:x:2100:
+
+
+To add the user in the group
+
+# usermod -G IBM preet
+# grep IBM /etc/group
+IBM:x:2100:preet
+
+To delete the group
+
+# groupdel IBM
+# grep IBM /etc/group
+
+
+
+****************************************************************************************************************************
+

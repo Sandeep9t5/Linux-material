@@ -1,0 +1,37 @@
+Difference between SU & SUDO --- BY CHATGPT
+===========================================================================================================================
+
+The terms su and sudo are both used in Unix-like operating systems to execute commands with elevated privileges, but they serve different purposes and have distinct behaviors:
+
+su (Substitute User)
+======================
+Purpose: su stands for "substitute user" or "switch user." It allows a user to assume the identity of another user within the system, typically the root user.
+Usage:
+su without any arguments switches to the root user and requires the root password.
+su <username> switches to the specified user and requires the password for that user.
+Environment: By default, su opens a new shell with the target user's environment. Using su - or su --login initiates a login shell and simulates a full login, including loading the target user's environment variables.
+Session: Once su is executed, you remain in the new user's session until you explicitly log out by typing exit or pressing Ctrl-D.
+
+sudo (Superuser Do)
+=========================
+Purpose: sudo stands for "superuser do." It allows a permitted user to execute a single command as the superuser or another user, as specified in the sudoers configuration file.
+Usage:
+sudo <command> runs the specified command with elevated privileges.
+Requires the current user's password, not the target user's password.
+Configuration: The sudoers file (/etc/sudoers) specifies which users can run which commands as which users on which machines. This file allows fine-grained control over permissions.
+Environment: By default, sudo preserves most of the calling user's environment variables but can be configured to use a more restricted environment.
+Session: sudo runs a single command and then returns to the normal user's session. It does not switch the user session like su does.
+Key Differences:
+Authentication:
+su requires the password of the target user.
+sudo requires the password of the current user.
+Scope:
+su changes the entire user session.
+sudo runs a single command with elevated privileges.
+Configuration:
+su has no specific configuration file for access control.
+sudo uses the sudoers file to control access and permissions.
+Practical Use Cases:
+su: Useful for switching to another user entirely for a prolonged period, especially for administrative tasks that require frequent and varied commands.
+sudo: Preferred for executing individual commands with elevated privileges, ensuring that the user only has temporary access to root privileges, thus reducing security risks.
+Both tools are essential for system administration, but sudo is generally favored for its granular control and security features.

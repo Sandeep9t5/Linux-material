@@ -1,0 +1,125 @@
+Types of Linux Text Editors
+=============================
+GUI Based Text Editor                                                      Terminal Based Text Editors
+
+Gedit								    Vi 	        	Vim 		  Nano
+                                                               (colourless)          (colourful)
+
+1.GUI based text editor
+===========================
+[root@localhost~]# cat  > vishu
+
+[root@localhost~]# gedit
+
+edit what you want in text editor
+
+click open    ---->  click file system  ---->  vishu ----> save
+
+
+
+2.Terminal based text editors
+================================
+
+Working modes of vi & vim Text Editors
+
+1)ESC mode - (esc)
+
+To perform cut,copy,paste,undo,redo & move cursor
+
+2)Command mode - (:)
+
+To perform search,replace,setline no & move cursor
+
+3)Insert mode - (i)
+
+To edit new data into file
+
+
+
+
+
+	   --------	Insert mode
+
+esc mode
+	   --------	Command mode
+
+
+
+ESC mode (press esc)
+======================
+
+copy
+====
+yy --------
+
+paste
+=====
+p ----------
+
+delete
+======
+dd -------
+
+cut
+====
+cc ------
+
+undo
+======
+U
+
+Redo
+=====
+cntrl+r
+
+
+
+
+Moving cursors
+================
+
+up  --->  gg
+down  ---> shift+g
+
+<-----   o
+------>  $
+
+
+
+
+Command mode  (press  :  )
+============================
+
+1)Search
+
+:/yatharth
+
+2)Replace
+
+: %s /yatharth /vishesh/g
+
+3)Line no
+
+:se nu
+
+4)cursor move
+
+: 11 ( Type on which line want to move on )
+
+
+Insert mode ( press i )
+========================
+
+( press i ) --- > To add new data into file
+
+
+:w   --->  save
+:q   --->  quit
+:wq!  ---> save & quit
+
+
+
+
+
+
+

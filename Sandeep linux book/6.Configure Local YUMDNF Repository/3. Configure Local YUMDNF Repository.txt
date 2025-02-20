@@ -1,0 +1,52 @@
+Nehra classes - Configure Local YUMDNF Repository
+--------------------------------------------------
+https://www.youtube.com/live/HRKvoIqJvbc?si=vNCJ89trqhI3p4Tp
+
+
+vim /etc/yum/pluginconf.d/subscription-manager.conf
+enabled=0
+:wq!
+
+
+
+lsblk
+mkdir /localrepo
+mount /dev/sr0  /localrepo
+
+[root@localhost yum.repos.d]# dnf config-manager --add-repo=file:///localrepo/BaseOS
+[root@localhost yum.repos.d]# dnf config-manager --add-repo=file:///localrepo/AppStream
+
+[root@localhost yum.repos.d]# dnf config-manager --add-repo=http://mirrorlist.centos.org?-----------
+[root@localhost yum.repos.d]# ls
+
+
+EPEL Repository
+
+
+[root@localhost~]# dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+[root@localhost~]# cd /etc/yum.repos.d
+[root@localhost yum.repos.d]# ls
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

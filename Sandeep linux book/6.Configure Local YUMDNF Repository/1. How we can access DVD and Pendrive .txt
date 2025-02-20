@@ -1,0 +1,276 @@
+How we can access DVD  data in Linux
+====================================================
+
+First Method  ( Automatic Mountpoint )   ==>   using automatic mount point ==> if we are working in the GUI mode ==>/run/media/username/devicename
+
+Second Method ( Manual Mountpoint )      ==>   we can mount this drive on any directory to access the data                  ==> /mnt or custom directory.
+
+=======================================================================================================================
+/mnt ==> default directory  ==> use to mount any device on it ==> but we have choice to make any directory and mount on it
+========================================================================================================================
+
+/media ==> this is the default mounting point for only usb types of drive ( usb automatically mounted on it )
+/mnt ==> We can mount any device or shared directory using network  (we can mount usb also)
+
+=========================================================================================================================
+
+in RHEL-6 			/media/devicename
+in RHEL-7/8  			/run/media/username/devicename 
+in Rhel 7/8                     ls /media ------> blank
+====================================================================================================================
+
+1. works in Rhel-7/8
+2. if we are working in GUI mode
+
+# ls /run/media/username/devicename 
+
+
+# cd /run/media/username/devicename-1
+# ls
+
+
+# cd /run/media/username/devicename-2
+# ls 
+
+========================================================================================================================
+
+If we are working in CLI mode, only in that case we need to mount these drive manually on any directory to access the data.
+
+===========================================================================================================================
+
+Linux Machine    ==> ISO image or dvd drive  ==>  /dev/sr0
+		 ==> Pendrive 		     ==>  /dev/sdb1
+===========================================================================
+
+# ls /dev/sr0		( will not work )
+# ls /dev/sdb1		( will not work )
+
+Linux always works on the directory structure not on the device structure
+we need to mount every device on any directory to access the data
+
+================================================================================
+GUI Based
+
+1.Using Automatic Mounting point
+
+[root@localhost~]# lsblk
+[root@localhost~]# mkdir /redhatdvd
+[root@localhost~]# cd /run/media/root/RHEL-8-0-0-BaseOS-x86_64
+[root@localhost RHEL-8-0-0-BaseOS-x86_64]# ls
+
+
+[root@localhost RHEL-8-0-0-BaseOS-x86_64]# cp -rf * /redhatdvd
+[root@localhost RHEL-8-0-0-BaseOS-x86_64]# cd 
+[root@localhost~]# ls /redhatdvd
+
+
+[root@localhost~]# lsblk
+[root@localhost~]# unmount /run/media/root/RHEL-8-0-0-BaseOS-x86_64               
+[root@localhost~]# eject                                                   ----- >  ejecting DVD
+[root@localhost~]# lsblk
+
+
+
+[root@localhost~]# rm -rf /redhatdvd
+
+****************************************************************************************************************
+
+2. Using default mount point (/mnt )
+
+[root@localhost~]# lsblk
+[root@localhost~]# unmount /run/media/root/RHEL-8-0-0-BaseOS-x86_64
+[root@localhost~]# mount /dev/sr0   /mnt
+[root@localhost~]# lsblk
+[root@localhost~]# ls /mnt
+
+copying dvd data's to redhatdvd directory
+
+[root@localhost~]# mkdir /redhatdvd
+[root@localhost~]# cd  /mnt
+[root@localhost mnt]# cp -rf * /redhatdvd
+[root@localhost~]# 
+[root@localhost~]# ls /redhatdvd
+
+**********************************************************************************************************************
+
+
+3. Using manual mount point
+
+[root@localhost~]# lsblk
+[root@localhost~]# unmount /run/media/root/RHEL-8-0-0-BaseOS-x86_64
+[root@localhost~]# mkdir /isomount
+[root@localhost~]# mount /dev/sr0   /isomount
+[root@localhost~]# lsblk
+[root@localhost~]# ls /isomount
+
+
+****************************************************************************************************************************
+
+
+CLI mode ==> supports only manual mounting only
+# lsblk ==> will check drivename 
+
+# mount  source  destination
+# umount <mounting point name>
+
+**************************************************************************************************************************
+
+CLI Based
+
+CLI mode ==> supports only manual mounting only
+
+1. Using default mount point (/mnt )
+
+
+[root@localhost~]# lsblk
+[root@localhost~]# mount /dev/sr0   /mnt
+[root@localhost~]# lsblk
+[root@localhost~]# ls /mnt
+
+[root@localhost~]# mkdir /redhatdvd
+[root@localhost~]# cd  /mnt
+[root@localhost mnt]# cp -rf * /redhatdvd
+[root@localhost~]# 
+[root@localhost~]# ls /redhatdvd
+[root@localhost~]# unmount  /mnt
+[root@localhost~]# eject
+
+
+2. Using manual mount point
+
+[root@localhost~]# lsblk
+[root@localhost~]# unmount /run/media/root/RHEL-8-0-0-BaseOS-x86_64
+[root@localhost~]# mkdir /isomount
+[root@localhost~]# mount /dev/sr0   /isomount
+[root@localhost~]# lsblk
+[root@localhost~]# ls /isomount 
+
+
+
+
+************************************************************************************************************************
+***********************************************************************************************************************
+
+
+
+How we can access  Pendrive data in Linux
+
+1.Using Automatic Mounting point
+
+pendrive   ----->  Machine
+
+[root@localhost~]# lsblk
+[root@localhost~]# mkdir /pendrivedata
+
+[root@localhost~]# cd /run/media/root/ESD-ISO
+[root@localhost ESD-ISO]# ls
+[root@localhost ESD-ISO]# cp -rf * /pendrivedata
+[root@localhost~]# ls /pendrivedata
+
+
+Machine data ---> pendrive
+
+[root@localhost~]# mkdir /tcs
+[root@localhost~]# touch /tcs/abc{1..10}
+[root@localhost~]# cp -rf  /tcs   /run/media/root/ESD-ISO
+[root@localhost~]# ls /run/media/root/ESD-ISO
+[root@localhost~]# lsblk
+[root@localhost~]# unmount /run/media/root/ESD-ISO
+[root@localhost~]# lsblk
+
+***************************************************************************************************************************
+2. Using default mount point (/mnt )
+
+[root@localhost~]# lsblk
+[root@localhost~]# unmount /run/media/root/ESD-ISO
+[root@localhost~]# mount /dev/sdb1   /mnt
+[root@localhost~]# lsblk
+[root@localhost~]# ls /mnt
+
+[root@localhost~]# mkdir /pendrivedata
+[root@localhost~]# cd  /mnt
+[root@localhost mnt]# cp -rf * /pendrivedata
+[root@localhost~]# 
+[root@localhost~]# ls /pendrivedata
+[root@localhost~]# unmount  /mnt
+[root@localhost~]# eject 
+
+
+3. Using manual mount point
+
+[root@localhost~]# lsblk
+[root@localhost~]# unmount /run/media/root/RHEL-8-0-0-BaseOS-x86_64
+[root@localhost~]# mkdir /pendrive
+[root@localhost~]# mount /dev/sdb1   /pendrive
+[root@localhost~]# lsblk
+[root@localhost~]# ls /pendrive
+
+
+[root@localhost~]# touch hello.txt
+[root@localhost~]# cp -rf hello.txt  /pendrive                     Machine data ---> pendrive
+
+
+[root@localhost~]# cp -rf  /pendrive/tcs    /tmp                   pendrive   ----->  Machine
+
+[root@localhost~]# lsblk
+[root@localhost~]# unmount  /pendrive
+[root@localhost~]# lsblk
+
+
+**********************************************************************************************************************************************************************************************************************************************************
+
+
+1. How we can access internet downloaded iso data in Linux
+============================================================
+
+[root@localhost~]# which wget
+[root@localhost~]# yum install wget*
+[root@localhost~]# wget  http://repo.extreme------------------------dvd.iso
+[root@localhost~]# ls
+Centos stream-------dvd.iso
+
+[root@localhost~]# mount  Centos stream-------dvd.iso   /mnt
+[root@localhost~]# ls /mnt
+
+[root@localhost~]# mkdir /newdata
+[root@localhost~]# cp -rf /mnt/*  /newdata
+
+[root@localhost~]# ls /newdata
+
+
+[root@localhost~]# unmount  /mnt
+[root@localhost~]# lsblk
+[root@localhost~]# rm -rf  Centos stream-------dvd.iso
+
+
+
+2. How we can access internet downloaded .tar.gz in Linux
+============================================================
+
+
+
+
+3. How we can access internet downloaded .tar.gz in Linux
+============================================================
+
+Tar.gz    compressed  File format
+
+
+[root@localhost~]# wget  http://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.5.tar.gz
+[root@localhost~]# ls
+nagios-4.4.5.tar.gz
+
+[root@localhost~]# tar   -xvf  nagios-4.4.5.tar.gz
+[root@localhost~]# ls
+nagios-4.4.5.tar.gz             nagios-4.4.5
+
+[root@localhost~]# rm  -rf  nagios-4.4.5.tar.gz
+
+[root@localhost~]# ls  nagios-4.4.5
+
+
+
+
+
+
+

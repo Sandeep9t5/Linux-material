@@ -1,0 +1,106 @@
+head & tail command
+
+----------------------------------------------------------------------------------------------------------------------------
+
+head - It displays 10 lines from the top of any file or from any command output.
+tail - It displays 10 lines from the bottom of any file or from any command output.
+
+head   <options>      <filename>
+tail   <options>      <filename>
+
+or
+
+command-name  |  head   <options>
+command-name  |  tail   <options>
+
+------------------------------------------------------------------------------------------------------------------------
+
+[root@localhost~]# cat  /etc/passwd
+[root@localhost~]# head  /etc/passwd
+[root@localhost~]# tail  /etc/passwd
+
+[root@localhost~]# head -n 5   /etc/passwd
+[root@localhost~]# head  -5    /etc/passwd
+
+[root@localhost~]# tail -n 5  /etc/passwd
+[root@localhost~]# tail -5   /etc/passwd
+
+[root@localhost~]# head -n 5   /etc/passwd ;  tail -n 5  /etc/passwd
+[root@localhost~]# head -n 1   /etc/passwd ;  tail -n 1  /etc/passwd
+
+[root@localhost~]# head  -5    /etc/passwd ; tail -5   /etc/passwd
+
+
+[root@localhost~]# head  /etc/passwd  | cat -n
+[root@localhost~]# head  /etc/passwd  | wc -l 
+[root@localhost~]# tail  /etc/passwd  | wc -l
+
+
+
+[root@localhost~]# cat -n  /etc/passwd   |  head -n 35  |  tail -n 5    >   /tmp/passwd
+[root@localhost~]# cat  /tmp/passwd
+
+
+[root@localhost~]# lsblk  | cat -n  | head -n 5  | tail -n 3
+[root@localhost~]# lscpu  | cat -n  | head -n 3
+[root@localhost~]# lscpu  | cat -n  | head -n 13  | tail -n 1
+
+
+[root@localhost~]# head -n 5   /etc/passwd                 ( on file)
+[root@localhost~]# lscpu  | head -n 3                      ( on command )
+
+
+
+
+
+
+
+
+Server monitoring using head and tail commands
+
+--------------------------------------------------------------------------------------------------------------------------
+
+[root@localhost~]# ls /var/log
+[root@localhost~]# useradd soniya
+[root@localhost~]# ls /home
+[root@localhost~]# cat    /etc/passwd
+[root@localhost~]# cat    /var/log/secure
+[root@localhost~]# tail    /var/log/secure
+[root@localhost~]# tail -f   /var/log/secure                            ( To monitor logs continuously )   to exit (cntl+c)
+[root@localhost~]# tail -f   /var/log/secure      /var/log/messages        ( To read multiple logs at a time )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,37 @@
+Various techniques to open the Terminal in Linux
+------------------------------------------------------
+
+
+
+
+We can login 6 User's at a time in RHEL-7
+---------------------------------------------
+
+1st user can login by GUI               ----------->     cntrl+alt+f1
+2nd user can login by Terminal          ----------->     cntrl+alt+f2
+3rd user can login by Terminal          ----------->     cntrl+alt+f3
+4th user can login by Terminal          ----------->     cntrl+alt+f4
+5th user can login by Terminal          ----------->     cntrl+alt+f5
+6th user can login by Terminal          ----------->     cntrl+alt+f6
+
+
+Graphical mode to CLI mode
+cntrl+alt+f3
+
+CLI mode to Graphical mode
+cntrl+alt+f1
+
+To open multiples Tab
+cntrl+shift+t
+
+switching between the terminals
+----->    cntrl+pagedown
+<-----    cntrl+pageup
+
+
+Zoomin terminal     cntrl+shift++
+Zoomout terminal    cntrl--
+
+
+
+

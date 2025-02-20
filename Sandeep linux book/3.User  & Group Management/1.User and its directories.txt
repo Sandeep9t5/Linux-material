@@ -1,0 +1,88 @@
+Types of Login User's
+------------------------
+
+1. Root user   (Super user)                               -  #                        100% privileges
+   Root's home directory  -          /root
+
+2. Normal user / custom user / Any user                   -  $                         20% privileges
+   Normal user's home directory  -   /home/sansri
+
+Types of Root
+-------------------
+1. root  (super user login name)
+2. /root - root's home directory
+3. "/"  - system partition ( root partition )
+
+
+/  ( Root directory or Parent directory or Top level Directory )
+-------------------------------------------------------------------
+
+By default around 19 sub directories will created automatically during the OS installation.
+19 directories = (OS defined data + User's defined data)
+                 (services + user's defined data both are defined under root directory)
+
+19 = 17 (public place) directories manages the Os  + 2 (private place) directories are reserved for the User's home account 
+17  directories manages the Os
+2   directories are reserved for the User's home account
+    1 directory is for Root user (super user)
+	/root
+
+    1 directory is for the all (custom user / normal user)
+	/home  ==>  sansri user  ==>  /home/sansri
+		    Deepak user  ==>  /home/Deepak
+
+
+Types of place for data creation 
+-----------------------------------
+1. Personal home account / Home directory /Private Place
+Every user have default right of data creation in their home account.
+
+2.Public place
+Except of users home directory all directory will count in public place under the  / (partition or directory).
+
+Note: 
+By default Super user have right of data creation on any place but normal users have right only in their home account except of their home account they will work as per the defined permissions on every directory.
+
+
+[root@localhost ~]#                               root user's home account   (root user apna home account pr hai)
+[root@localhost ~]# ls 
+[root@localhost ~]# ls /root
+[root@localhost ~]# ls /
+[root@localhost ~]# pwd
+/root
+
+
+[root@localhost ~]# ls /home
+sansri   deepak
+[root@localhost ~]# ls /home/sansri
+Desktop   Documents    Downloads    Music    Pictures     Public    Templates    Videos
+
+Types of command prompt
+------------------------
+
+1) Super user
+ 
+[root@localhost ~]#
+
+root         => username
+localhost    => machine name or hostname   (it is changable)
+~            => present working directory (I am sitting in my home account  /root)
+#            => Privileged Mode 100%
+
+You are login with root user on local host machine with (~) directory with privileged mode ( # )
+
+2) Normal user
+ 
+[sansri@localhost ~]#
+
+sansri         => username
+localhost    => machine name or hostname   (it is changable)
+~            => present working directory (I am sitting in my home account  /home/sansri)
+$            => Non-Privileged Mode 20%
+
+You are login with sansri user on local host machine with (~) directory with privileged mode ( $ )
+
+
+
+
+

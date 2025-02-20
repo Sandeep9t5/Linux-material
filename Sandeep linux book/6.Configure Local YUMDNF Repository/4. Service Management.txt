@@ -1,0 +1,115 @@
+Service Management
+===================
+
+         
+    RHEL -6 (daemon )                                                RHEL-7  ( units )
+
+1. Parent process = init					1. Parent process = systemd
+     process id =1							process id =1
+
+2.Service management tool    					2. Service management tool 					
+Temporary command =  service     				   Temporary command = systemctl
+Permanent command = chkconfig					   Permanent command = systemctl
+
+3.
+service sshd start						   systemctl start sshd
+service sshd restart						   systemctl restart sshd
+service sshd stop						   systemctl stop sshd
+service sshd reload						   systemctl reload sshd
+service sshd status						   systemctl status sshd
+
+4. 
+chkconfig sshd on						   systemctl enable sshd
+chkconfig sshd off						   systemctl disable sshd
+
+5.Quie boot process						5. Parallel boot process
+6.Service does not auto start after reboot			6. Service  auto start after reboot
+
+
+
+Types of unit
+-----------------
+1.Service  ==> ssh,ntp,dns etc
+2.path     ==> printer service
+3.sockets  ==>scsi & iscsi  or  network device concept
+
+systemctl       actions       unit.name
+
+systemctl       status        sshd
+                 or
+systemctl       status        sshd.services
+
+
+
+RHEL-6
+service      daemon   action  ->  Temporary action
+chkconfig    daemon   action  ->  Permanent action
+
+RHEL-7
+systemctl    action   daemon ->   Temporary action
+chkconfig    action   daemon ->   Permanent action
+
+systemctl    ( start/stop/status/restart/reload )      sshd
+systemctl    ( enable/disable )                        sshd
+
+[root@localhost~]#pid of sshd
+[root@localhost~]#systemctl start sshd
+[root@localhost~]#systemctl is-active sshd
+[root@localhost~]#systemctl enable sshd
+[root@localhost~]#systemctl is-enabled sshd
+[root@localhost~]#systemctl status sshd
+
+[root@localhost~]#systemctl stop sshd
+[root@localhost~]#systemctl is-active sshd
+[root@localhost~]#systemctl disable sshd
+[root@localhost~]#systemctl is-enabled sshd
+[root@localhost~]#systemctl status sshd
+
+
+
+When a service is reload its pid does not change and when its restarted its pid gets changed
+[root@localhost~]#pid of sshd
+53353
+[root@localhost~]#systemctl reload sshd
+[root@localhost~]#pid of sshd
+53353
+[root@localhost~]#systemctl restart sshd
+[root@localhost~]#pid of sshd
+53638
+
+
+Masking & Un-masking of services
+----------------------
+
+[root@localhost~]#systemctl list-unit-files |grep mask
+
+[root@localhost~]#systemctl status iptables
+[root@localhost~]#systemctl status firewalld
+
+[root@localhost~]#systemctl stop firewalld
+[root@localhost~]#systemctl disable firewalld
+[root@localhost~]#systemctl status firewalld
+
+[root@localhost~]#systemctl start firewalld
+[root@localhost~]#systemctl enable firewalld
+[root@localhost~]#systemctl status firewalld
+
+
+
+
+[root@localhost~]#systemctl stop firewalld
+[root@localhost~]#systemctl disable firewalld
+[root@localhost~]#systemctl mask firewalld
+[root@localhost~]#systemctl status firewalld
+
+
+[root@localhost~]#systemctl start firewalld     ----->error
+[root@localhost~]#systemctl unmask firewalld
+[root@localhost~]#systemctl start firewalld
+[root@localhost~]#systemctl enable firewalld
+[root@localhost~]#systemctl status firewalld
+
+
+[root@localhost~]#systemctl list-unit-files |grep mask
+
+***************************************************************************************************************************

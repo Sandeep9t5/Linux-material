@@ -1,0 +1,118 @@
+*************************************************************************************************************************
+
+
+
+SUDO ( Super user do )
+==============================
+
+
+It is mainly used to provide commands execution rights to any user or any group
+
+Only Root user has the execution right for all commands
+But normal user have only limited commands execution rights
+
+/etc/sudoers   - configuration file for Sudo
+
+
+
+
+
+To give full execution rights
+
+
+# vim /etc/sudoers
+
+## Allow root to run any command anywhere
+root     ALL=(ALL)        ALL
+preet     ALL=(ALL)        ALL
+
+
+To limit execution rights
+
+# which userdel
+/usr/sbin/userdel
+
+# vim /etc/sudoers
+
+## Allow root to run any command anywhere
+root     ALL=(ALL)        ALL
+preet     ALL=(ALL)        ALL,!/usr/sbin/userdel
+
+
+To give full execution rights on a group
+
+# grep india  /etc/group
+india:x:1002:user1,user2,user3
+
+# vim /etc/sudoers
+
+## Allow people in group wheel to run all commands 
+%wheel    ALL=(ALL)        ALL
+%india    ALL=(ALL)        ALL
+
+
+
+*****************************************************************************************************************************
+
+
+SUID (set user id )
+=========================
+
+SUID is used for giving permission to a user to run a program/file with the permission of the file owner.
+
+We can apply SUID by two methods-
+1.chmod u+s    "command file path"     Symbolic method
+2.chmod 4755   "command file path"     Numeric method
+
+We can remove SUID by two methods-
+1.chmod u-s    "command file path"     Symbolic method
+2.chmod 755   "command file path"     Numeric method
+
+# which useradd
+/usr/sbin/useradd
+ll /usr/sbin/useradd
+-rwxr-x---. 1 root root 114064 Feb 12 2014 /usr/sbin/useradd
+
+
+chmod 755  /usr/sbin/useradd
+ll /usr/sbin/useradd
+-rwxr-xr-x. 1 root root 114064 Feb 12 2014 /usr/sbin/useradd
+
+To add the SUID BY symbolic method
+
+chmod u+s /usr/sbin/useradd
+ll /usr/sbin/useradd
+-rwsr-xr-x. 1 root root 114064 Feb 12 2014 /usr/sbin/useradd  
+
+[preet@localhost]$ useradd vishu
+[preet@localhost]$ grep vishu  /etc/passwd
+vishu:x:1001:1001::/home/vishu:/bin/bash
+
+To remove the SUID BY symbolic method
+
+chmod u-s /usr/sbin/useradd
+ll /usr/sbin/useradd
+-rwxr-xr-x. 1 root root 114064 Feb 12 2014 /usr/sbin/useradd
+
+
+To add the SUID BY numeric method
+
+chmod 4755 /usr/sbin/useradd
+ll /usr/sbin/useradd
+-rwsr-xr-x. 1 root root 114064 Feb 12 2014 /usr/sbin/useradd  
+
+[preet@localhost]$ useradd vishu
+[preet@localhost]$ grep vishu  /etc/passwd
+vishu:x:1001:1001::/home/vishu:/bin/bash
+
+To remove the SUID BY numeric method
+
+chmod 755 /usr/sbin/useradd
+ll /usr/sbin/useradd
+-rwxr-xr-x. 1 root root 114064 Feb 12 2014 /usr/sbin/useradd
+
+
+
+
+
+****************************************************************************************************************************

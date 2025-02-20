@@ -1,0 +1,30 @@
+CentOS 7
+
+Method-4     ( By Using Manual Mounting point -  /redhat)
+=============================================================
+
+
+mkdir /redhatdvd
+ls /
+lsblk
+
+mount /dev/sr0  /redhatdvd
+
+lsblk
+lsblk-f
+df -TH
+vi /etc/fstab                       /dev/sr0             /redhatdvd       iso9660     defaults   0   0  
+systemctl daemon reload
+
+ls /redhatdvd
+
+cd /etc/yum.repos.d
+ls
+rm -rf *
+
+vi localrepo.repo
+[Packages]
+name=This is my local repo for packages directory.
+baseurl=file:///redhatdvd/
+enabled=1
+gpgcheck=0

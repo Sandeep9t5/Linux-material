@@ -1,0 +1,74 @@
+How to copy a file
+------------------------------------------------------------------------------------------------------------------------
+
+[root@localhost~]# cp   < source >        < destination >
+
+[root@localhost~]# cp   file1   file2
+[root@localhost~]# cp   file3    dir
+
+[root@localhost~]# cp  /etc/passwd      vishu
+[root@localhost~]# cp  /etc/passwd       .              To current location
+[root@localhost~]# cp  /etc/passwd       /root
+
+[root@localhost~]# cp -r  dir   dir2                     copy dir to dir2 ; create dir 2 if it does not exists
+[root@localhost~]# cp  -rf   etc    /root/desktop         rf  recursive and forcefully
+[root@localhost~]# cp  -rf *    /redhat                   copy all the files of that loctaion to the redhat folder
+
+
+
+How to cut and paste 
+------------------------------------------------------------------------------------------------------------------------
+
+[root@localhost~]# mv   < source >        < destination >
+
+[root@localhost~]# mv   file1     file2  
+                         cut      paste
+
+[root@localhost /]# mv   etc   temp
+
+
+How to rename  a file 
+------------------------------------------------------------------------------------------------------------------------
+
+[root@localhost~]# mv   < old file >        < new file >
+
+[root@localhost~]# mv   file1               myfile  
+                      < old file >       < new file >
+
+
+[root@localhost~]# ls
+myfile
+
+Note: after copying content of file to myfile , file 1 will be deleted
+
+
+How to remove  a file 
+------------------------------------------------------------------------------------------------------------------------
+
+For File
+
+rm  filename         -->  delete file
+rm  -rp  filename    -->  Removes non-empty directories including parents & sub directories
+rm  -rp  filename    -->  Removes even  non empty file &  directories
+
+
+[root@localhost~]# rm  janak                         -y 
+[root@localhost~]# rm  file1    file 2              after confirmation file will be deleted 
+[root@localhost~]# rm  -rf    file1    file 2              no confirmation is needed and file is  deleted forcefully
+
+For Directory
+
+[root@localhost~]# rmdir  dir1
+[root@localhost~]# rmdir   dir1   dir2  dir3 
+
+
+
+
+
+
+
+
+
+
+
+    

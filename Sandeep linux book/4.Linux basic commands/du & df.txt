@@ -1,0 +1,26 @@
+To see the size of file and directory
+============================================
+
+du
+
+[root@localhost /]# du                                                         will displays all the files in kb
+
+[root@localhost /]# du -h                                                      will displays all the files in kb,mb,gb
+
+[root@localhost /]# du -h   /etc/passwd
+
+
+***************************************************************************************************************************
+
+
+To check the size of partitions and mounted with which directory
+=======================================================================
+
+df
+
+[root@localhost /]# df								will displays all the files in kb
+
+[root@localhost /]# df -h							will displays all the files in kb,mb,gb
+
+[root@localhost /]# df - Th			will displays also displays the file system formatted with
+ 

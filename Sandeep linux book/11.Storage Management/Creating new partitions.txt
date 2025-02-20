@@ -1,0 +1,128 @@
+Types of partition in Linux for installation purpose
+=======================================================
+
+1.Root Partition : "/"              (system partition to save Linux os)
+
+2.Root Partition : "/boot"            to save booting files of Linux
+	RHEL-5 --> lilo & GRUB
+	RHEL-6 --> GRUB
+	RHEL-7 --> GRUB 2
+
+3.Swap Partition : For virtual Memory
+
+
+****************************************************************************************************************************
+
+
+Create, Mount & Delete partition
+====================================
+
+Creating partition
+======================
+
+Disk info
+------------
+[root@localhost~]# fdisk -l
+[root@localhost~]# df
+[root@localhost~]# df -h                ( human redable format)
+[root@localhost~]# df -Th               (kaun sa partition kis file system se format kiya gya hai)
+
+
+
+creating partition
+=======================
+
+[root@localhost~]#  fdisk /dev/sda         (kis hdisk me aap partition create krna chathe hai)
+command (m for help): m
+command (m for help): n                    (n- to add a new partition)
+select (default e)  : p                    (p- primary partition  &   e- extended partition)
+                    : press enter
+                    : press enter
+
+Last sector,+sector or+size : +10G
+command (m for help): p
+                    : w                   (To save)
+
+
+[root@localhost~]# partprobe /dev/sda     (To update the kernel info)
+
+
+Formating partition using file system
+============================================
+
+[root@localhost~]# mkfs.xfs  /dev/sda4
+[root@localhost~]# fdisk -l
+[root@localhost~]# df -Th  
+
+
+
+***************************************************************************************************************************
+
+
+Mounting
+===================
+
+1.Temporay Mounting
+
+[root@localhost/]# mkdir sansri
+[root@localhost/]# ls 
+[root@localhost/]# mount /dev/sda4   /sansri
+[root@localhost/]# df -Th 
+[root@localhost/]# cp -rf   etc   sansri
+[root@localhost/]# ls sansri
+etc
+[root@localhost/]# df -Th  
+[root@localhost/]# init 6
+[root@localhost/]# df -Th 
+
+2.Permanent Mounting
+
+[root@localhost/]# vim /etc/fstab
+
+/dev/sda         /sansri       xfs   defaults   00
+
+:wq
+[root@localhost/]# df -Th
+[root@localhost/]# mount -a     (To update the mounting info)
+[root@localhost/]# df -Th  
+[root@localhost/]# init 6
+[root@localhost/]# df -Th 
+
+
+****************************************************************************************************************************
+
+
+Deleting the newly or any Partition
+=====================================
+
+Unmounting 
+===========
+
+[root@localhost /]# vim /etc/fstab
+
+erase the entry
+
+[root@localhost /]# mount -a             ----------------------->    To update the mounting info
+[root@localhost /]# df -Th
+
+[root@localhost /]# unmount   /sansri    ------------------------>   To remove the temporary mounting
+
+[root@localhost /]# df -Th
+
+
+
+Deleting Partition
+======================
+
+
+[root@localhost /]# fdisk  /dev/sda
+
+command ( m for help ): m
+                      : d                             ----->  to delete
+                      : 4                             ----->  partition number which needs to be deleted
+                      : p                             ----->  To check partition is deleted or not
+                      : w                             ----->  To Save
+
+[root@localhost /]# partprobe  /dev/sda               ----->  To update the kernel info
+[root@localhost /]# fdisk -l
+

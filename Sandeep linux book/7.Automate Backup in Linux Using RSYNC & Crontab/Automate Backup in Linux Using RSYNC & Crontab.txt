@@ -1,0 +1,97 @@
+Nehra classes - Automate Backup in Linux Using RSYNC & Crontab in Linux
+---------------------------------------------------------------------------
+https://www.youtube.com/live/LoLAXoWzYuY?si=uN1wAoSpSLKyRUbA
+
+
+# hostnamectl    set-hostname  backup-source
+yum repolist all
+rpm -qa | grep rsync
+yum install rsync -y
+
+su-sansri
+$ mkdir /backup
+$ cd backup/
+touch test{1..10}
+ls
+cal>cal.txt
+
+vim Nehra.txt
+welcome to Nehra classes
+
+mkdir -p /tmp/backup
+ls -ld /tmp/backup
+rsync -v /home/sansri/backup/*   /tmp/backup/  --progress
+cd tmp/backup
+ls
+
+
+
+*****************************************
+
+Machine-1  192.168.29.206
+
+[root@backup-source~]# mkdir -p /backupsource/
+[root@backup-source~]# cd /backupsource/ ; touch test{1..10}
+ls
+
+vim Nehhra.txt
+Nehra classes
+
+rsync  -av -e ssh/backupsource/* root@192.168.29.207:/backupdestination
+
+Machine -2  192.168.29.207
+
+# hostnamectl    set-hostname  backup-destination
+[root@backup-destination]# yum repolist all
+[root@backup-destination]# rpm -qa | grep rsync
+[root@backup-destination]# yum install rsync -y
+
+[root@backup-destination]# mkdir -p /backupdestination/
+[root@backup-destination]# cd /backupdestination/
+[root@backup-destination backupdestination]#ls
+[root@backup-destination backupdestination]#ls -la
+
+[root@backup-destination backupdestination]# ls
+
+
+********************************************************************************************************************
+with automation
+
+Machine-1  192.168.29.206
+
+[root@backup-source backupsource]# ssh-keygen
+[root@backup-source backupsource]# ssh-copy-id -i root@192.168.29.207
+[root@backup-source backupsource]# vim /root/backup.sh
+
+#!bin/bash
+/usr/bin/rsync  -av -e ssh/backupsource/* root@192.168.29.207:/backupdestination
+
+[root@backup-source backupsource]# chmod +x /root/backup.sh
+
+
+[root@backup-source backupsource]# crontab -e
+
+*****/bin/bash  /root/backup.sh
+
+[root@backup-source backupsource]# crontab -l
+
+
+[root@backup-source backupsource]# vim newfile.txt
+hello
+sansri
+
+[root@backup-source backupsource]# mkdir abc
+
+
+
+Machine -2  192.168.29.207
+
+[root@backup-destination backupdestination]# ls
+[root@backup-destination backupdestination]# ls
+[root@backup-destination backupdestination]# cat newfile.txt
+[root@backup-destination backupdestination]# ls
+
+
+
+
+
