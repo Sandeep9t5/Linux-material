@@ -1,0 +1,1048 @@
+Network Configuration
+===========================
+
+RHEL -8    Machine-1
+
+IP             ==>  192.168.0.10
+SUBNET         ==>  255.255.255.0
+machine name   ==>  station10.example.com
+
+==================================================
+
+RHEL -8    Machine-2
+
+IP             ==>  192.168.0.20
+SUBNET         ==>  255.255.255.0
+machine name   ==>  station20.example.com
+
+
+
+Network Management
+===================
+
+         
+    RHEL -6                                                 		RHEL-7  
+
+1. ifconfig					                         1. ifconfig
+   hostname							            hostname / hostnamectl
+
+2. Permanent file of hostname    					2. Permanent file of hostname
+ 					
+cat /etc/sysconfig/network     				                    cat /etc/hostname
+					   
+
+3. Interface name or lan card or NIC name                                3. Interface name or lan card or NIC name
+      (default)                                                                 (default)
+      
+
+lo ==>loopback ==>127.0.0.1                                                lo ==>loopback ==>127.0.0.1
+
+eth0   eth1  eth2                                                             ens33   or   ens160
+						   
+
+
+
+Types of ip changing methods                                             Types of ip changing methods 
+=============================                                           =============================
+
+
+1. command line	==>  setup						        1. command line ==>  nmcli or  nmtui
+
+2. file method 									2. file method 
+  
+                  cat /etc/sysconfig/network-scripts/ifcfg-eth0   or ifcfg-ens33  or  ifcfg-ens160 
+
+
+nmcli   ==>  network manager commandline interface 
+nmtui   ==>  network manager text user interface
+
+
+
+
+
+
+				con-name  ==> choice
+					      ens33  or xyz
+					
+				/etc/sysconfig/network-scripts/ifcfg-ens33   or ifcfg-xyz
+
+
+nmcli
+
+
+
+
+
+				ifname  ==>  ens33
+
+
+
+
+
+nmcli connection show
+nmcli connection delete ens33     or      rm  /etc/sysconfig/network-scripts/ifcfg-ens33
+nmcli connection add
+
+
+
+*********************************************************************************************************************
+
+
+
+1.commandline Method   (Deleting network file and adding new file)
+==========================
+
+Machine-1
+(commandline method)
+
+
+# hostname
+# hostnamectl
+# hostnamectl    set-hostname   station10.example.com     (by commandline )
+
+# vim  /etc/hosts     (by file)
+
+192.168.0.10      station10.example.com
+192.168.0.20      station20.example.com
+
+# cat /etc/hostname
+# exit
+# hostname
+
+1.find lancard name
+2.check filename
+3.delete   ==>  add      / modify
+
+#ifconfig
+#cat  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=no
+
+
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ---       (lancard up  nahi hai)
+(filename)								   (device name)
+
+
+
+Deleting network file
+======================
+#nmcli connection delete ens33
+#nmcli connection show
+
+
+
+Adding new network file
+=======================
+#nmcli connection add   con-name  ens33(choice)   ifname  enss33(no choice)    type  ethernet   autoconnect  yes             ip4  192.168.0.10/24
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+
+#cat  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.0.10
+PREFIX=24
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=yes
+
+Machine-2
+(commandline method)
+
+
+# hostname
+# hostnamectl
+# hostnamectl    set-hostname   station20.example.com    (by commandline)
+
+# vim  /etc/hosts     (by file)
+
+192.168.0.10      station10.example.com
+192.168.0.20      station20.example.com
+
+
+# cat /etc/hostname
+# bash
+# hostname
+
+#ifconfig
+
+#nmcli connection show
+
+ens160            sabkashkjefkefhjkefhwejkehhfw           ethernet              160       (lancard up hai)
+(filename)								   (device name)
+
+
+
+Deleting network file
+======================
+#nmcli connection delete ens160
+#nmcli connection show
+
+
+
+
+Adding new network file
+=======================
+#nmcli connection add   con-name  xyz(choice)   ifname  enss160(no choice)    type  ethernet   autoconnect  yes             ip4  192.168.0.20/24
+#nmcli connection show
+xyz           sabkashkjefkefhjkefhwejkehhfw           ethernet               ens160      (lancard up hai)
+(filename)								   (device name)
+
+
+
+
+#cat  /etc/sysconfig/network-scripts/ifcfg-xyz
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.0.20
+PREFIX=24
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=xyz
+UUID=
+DEVICE=ens160
+ONBOOT=yes
+
+
+
+
+
+2.FILE Method
+==========================
+
+Machine-1
+(File method)
+
+#ifconfig
+#vim  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.0.100
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=no
+
+#if down ens33
+#if up ens33
+
+Machine-2
+(File method)
+
+#ifconfig
+#vim  /etc/sysconfig/network-scripts/ifcfg-ens160
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+IPADDR=192.168.0.200
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=160
+UUID=
+DEVICE=160
+ONBOOT=no
+
+#if down ens160
+#if up ens160
+
+
+
+1.commandline Method   (Modifying )
+==========================
+
+Machine-1
+(commandline method)
+
+#nmcli connection show
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+#nmcli connection modify ens33 ipv4.addresses  192.168.0.50/24
+
+
+#nmcli connection down ens33
+#nmcli connection up ens33
+#nmcli connection show
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+#ifconfig
+
+
+
+How to assign ip using DHCP Server
+======================================
+1.Command based
+2.File based
+
+1.commandline Method   (Deleting network file and adding new file)
+==========================
+
+Machine-1
+(commandline method)
+
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+
+#nmcli connection delete ens33
+#nmcli connection add   con-name  ens33(choice)   ifname  enss33(no choice)    type  ethernet   autoconnect  yes             
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)
+
+#ifconfig
+
+
+#cat  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=yes
+
+2.File based
+========================
+
+
+#vim  /etc/sysconfig/network-scripts/ifcfg-ens33
+
+TYPE=ETHERNET
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=
+DEVICE=ens33
+ONBOOT=yes
+
+#nmcli ifdown ens33
+#nmcli ifup ens33
+
+#nmcli connection show
+ens33             sabkashkjefkefhjkefhwejkehhfw           ethernet               ens33       (lancard up hai)
+(filename)								   (device name)
+
+#ifconfig
+
+
+
+***************************************************************************************************************************
+
+
+
+How to create multiple profile of any single interface
+==========================================================
+
+
+
+				file (static ip)
+
+lancard    
+
+
+				file (dhcp ip)
+
+
+1.Commandline method
+======================
+
+#ifconfig
+#nmcli connection add   con-name  internet(choice)   ifname  enss160(no choice)    type  ethernet   autoconnect  yes 
+
+#nmcli connection show
+
+
+xyz           sabkashkjefkefhjkefhwejkehhfw           ethernet               ens160      (lancard up hai)
+(filename)								   (device name)
+
+internet           sabkashkjefkefhjkefhwejkehhfw           ethernet           -----      (lancard up hai)
+(filename)								   (device name)
+
+
+#nmcli connection show --active
+xyz           sabkashkjefkefhjkefhwejkehhfw           ethernet               ens160      (lancard up hai)
+(filename)								   (device name)
+
+#nmcli connection up internet
+
+#nmcli connection show
+
+internet           sabkashkjefkefhjkefhwejkehhfw           ethernet          ens160      (lancard up hai)
+(filename)								   (device name)
+xyz           sabkashkjefkefhjkefhwejkehhfw           ethernet               -----      (lancard up  nahi hai)
+(filename)								   (device name)
+
+#ifconfig
+#ping google.com
+
+2.file method
+==============
+
+
+IPv4 Configuration
+===================       
+
+RHEL-6   setup
+RHEL-7   nmcli
+
+
+Method -1 ( nmcli command )
+============================
+
+nmcli connection show
+nmcli connection delete ens33
+nmcli connection show
+
+nmcli connection add con-name vishu ifname ens033 type ethernet autoconnect yes ip4 '192.168.1.100/24'
+nmcli connection show
+
+ifconfig
+
+disable lan card    ifdown ens033
+enable lan card    ifup ens033
+
+nmcli connection modify  vishu ipv4.addresses 192.168.1.200/24
+ifconfig
+ifdown ens033
+ifup ens033
+ifconfig
+
+Method -2 ( ip configuration file )
+=======================================
+
+nmcli connection show
+vim /etc/sysconfig/network-scripts/ifcfg-ens033
+
+BOOTPROTO=static
+ONBOOT=yes
+IPADDR=192.168.1.300
+NETMASK=255.255.255.0
+
+:se nu
+
+ifconfig
+ifdown ens033
+ifup ens033
+ifconfig
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+****************************************************************************************************************************
+
+Ports :-
+==========
+
+firewall-cmd --add-port={6443,10250,10259,10257,2379-2380}/tcp
+firewall-cmd --permanent --add-port={6443,10250,10259,10257,2379-2380}/tcp
+firewall-cmd --complete-reload
+firewall-cmd --list-all
+
+Port Forwarding :-
+====================
+
+firewall-cmd --add-forward-port=port=22:proto=tcp:toport=2222
+firewall-cmd --permanent --add-forward-port=port=22:proto=tcp:toport=2222
+systemctl restart firewalld.service
+
+
+=============================================================================================================================
+
+Softwares (Packages)
+=======================
+
+
+
+Linux Package Manager
+
+
+1. Redhat Package Manager (RPM)      - cannot install automatic dependencies of an package
+2. Yellowdog Updater Modifier (YUM)  - can install automatic dependencies of an package
+
+
+
+Package query                         rpm -qa tar
+Total installed packages              rpm -qa | wc -l
+Remove package                        rpm -e zip 
+Remove package forcefully             rpm -e zip --nodeps
+Install package                       rpm -ivh zip press tab 
+
+
+
+Configuring Yum Server
+=======================
+
+Method-1 ( By automatic Mounting point ) 
+=======================================
+
+lsblk
+mkdir /redhatdvd
+ls /
+cd /run/media/root/RHEL-9-0-0-BaseOS-X86_64                        /run/media/root/Devicename
+ls
+cp -rf *  /redhatdvd
+
+
+vim /etc/yum.repos.d/localrepo.repo
+[path-1]
+name=This is my local repo for baseos directory.
+baseurl=file:///redhatdvd/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=This is my local repo for baseos directory.
+baseurl=file:///redhatdvd/AppStream
+enabled=1
+gpgcheck=0
+
+
+Method -2  ( Directly from the ISO dvd )
+===================================================
+Requirement - Redhat iso must always be connected
+
+lsblk
+ls /run/media/root/RHEL-9-0-0-BaseOS-X86_64
+ls /run/media/root/RHEL-9-0-0-BaseOS-X86_64/AppStream
+ls /run/media/root/RHEL-9-0-0-BaseOS-X86_64/BaseOs
+
+vim /etc/yum.repos.d/localrepo.repo
+[path-1]
+name=This is my local repo for baseos directory.
+baseurl=file:///run/media/root/RHEL-9-0-0-BaseOS-X86_64/AppStream
+enabled=1
+gpgcheck=0
+[path-2]
+name=This is my local repo for baseos directory.
+baseurl=file:///run/media/root/RHEL-9-0-0-BaseOS-X86_64/BaseOs
+enabled=1
+gpgcheck=0
+
+
+Method-3 ( By Using Default Mounting point -  /mnt)
+=======================================================
+
+lsblk
+mount /dev/sr0  /mnt
+lsblk
+mkdir /localrepo
+ls /
+cd /mnt
+ls
+cp -rf *  /localrepo
+
+vim /etc/yum.repos.d/localrepo.repo
+[path-1]
+name=This is my local repo for baseos directory.
+baseurl=file:///redhatdvd/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=This is my local repo for baseos directory.
+baseurl=file:///redhatdvd/AppStream
+enabled=1
+gpgcheck=0
+
+
+Method-3     ( By Using Manual Mounting point -  /redhat)
+=============================================================
+
+
+mkdir /redhatdvd
+ls /
+lsblk
+
+mount /dev/sr0  /redhatdvd
+lsblk
+lsblk-f
+vim /etc/fstab                       /dev/sr0             /redhatdvd       iso9660     defaults   0   0  
+systemctl daemon reload
+df -TH
+ls /redhatdvd
+
+vim /etc/yum.repos.d/localrepo.repo
+[path-1]
+name=This is my local repo for baseos directory.
+baseurl=file:///redhatdvd/AppStream
+enabled=1
+gpgcheck=0
+[path-2]
+name=This is my local repo for baseos directory.
+baseurl=file:///redhatdvd/BaseOS 
+enabled=1
+gpgcheck=0
+
+
+Method-4     ( By Using Manual Mounting point -  /)           FALTU
+===========================================================
+
+lsblk
+mkdir /redhatdvd
+mkdir /localrepo
+ls /
+lsblk
+mount /dev/sr0  /redhatdvd
+lsblk
+cd /redhatdvd
+ls
+cp -rf *  /localrepo
+
+vim /etc/yum.repos.d/localrepo.repo
+[path-1]
+name=This is my local repo for baseos directory.
+baseurl=file:///redhatdvd/BaseOS
+enabled=1
+gpgcheck=0
+[path-2]
+name=This is my local repo for baseos directory.
+baseurl=file:///redhatdvd/AppStream
+enabled=1
+gpgcheck=0
+
+
+Yum commands
+=================
+
+yum clean all
+yum repolist
+yum repolist all
+yum list
+yum list | grep httpd
+which yum
+yum info httpd
+yum search httpd
+yum install httpd
+yum remove httpd
+
+
+
+Downloading something from ISO ( We need to mount iso on some directory to acess the files inside iso )
+==============================================================================================================
+
+wget https://repo.extreme-ix.org/centos/7.9.2009/isos/x86_64/CentOs-7-x86_64-DVD-2009.iso
+
+ls
+mkdir /data
+mount CentOs-7-x86_64-DVD-2009.iso  /data
+ls
+
+mkdir /newdata
+cd /data
+cp -rf *   /newdata
+cd 
+ls /data
+ls /newdata
+umount  /data
+
+rm -rf CentOs-7-x86_64-DVD-2009.iso
+
+
+=============================================================================================================================
+
+Service Management
+===================
+
+         
+    RHEL -6 (daemon )                                                RHEL-7  ( units )
+
+1. Parent process = init					1. Parent process = systemd
+     process id =1							process id =1
+
+2.Service management tool    					2. Service management tool 					
+Temporary command =  service     				   Temporary command = systemctl
+Permanent command = chkconfig					   Permanent command = systemctl
+
+3.
+service sshd start						   systemctl start sshd
+service sshd restart						   systemctl restart sshd
+service sshd stop						   systemctl stop sshd
+service sshd reload						   systemctl reload sshd
+service sshd status						   systemctl status sshd
+
+4. 
+chkconfig sshd on						   systemctl enable sshd
+chkconfig sshd off						   systemctl disable sshd
+
+5.Quie boot process						5. Parallel boot process
+6.Service does not auto start after reboot			6. Service  auto start after reboot
+
+
+=============================================================================================================================
+
+
+NFS Server Configuration
+===================================
+
+Server Machine
+================
+
+ifconfig
+ping xxx.xxx.xxx.xxx  (client machine ip )
+
+
+mkdir /nfsserver
+chmod 777 /nfsserver
+
+vim /etc/exports
+/nfsserver *(rw,async) 
+or               
+/nfsserver *(rw,sync)
+or
+/nfsserver 192.168.1.0 (rw,async)
+or
+/nfsserver 192.168.1.200 (rw,async)
+
+ls /nfsserver
+systemctl start nfs-server
+systemctl enable nfs-server
+firewall-cmd --permanent --add-service=nfs
+firewall-cmd --permanent --add-service=rpc-bind
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd --reload
+exportfs -v
+exportfs -r
+showmount -e
+
+
+ls /nfsserver
+
+
+
+Client
+===============
+
+ifconfig
+ping xxx.xxx.xxx.xxx  (nfs server machine ip )
+
+mkdir /garden         ( This will act as mounting point for the /nfsserver directory which is placed on server machine )
+showmount -e xxx.xxx.xxx.xxx ( nfs server machine ip )
+mount xxx.xxx.xxx.xxx:/nfsserver /garden
+( nfs server machine ip )
+
+vim /etc/fstab
+xxx.xxx.xxx.xxx:/nfsserver        /garden      nfs    defaults   0 0              
+( nfs server machine ip )
+
+mount -a
+
+df -TH
+cd /garden
+ls
+mkdir vishesh\ malik{1..20}
+ls
+
+=============================================================================================================================
+
+
+
+FTP  Configuration
+==========================================
+
+
+FTP Server
+==============
+
+ifconfig
+yum repolist
+yum install vsftpd*  -y
+systemctl start vsftpd
+systemctl enable vsftpd
+firewall-cmd --permanent --add-service=ftp
+firewall-cmd --reload
+
+cd  /var/ftp/
+ls
+cd pub
+mkdir download
+cd download
+touch vishesh{1..20}
+ls
+cd /
+chmod 777 /var/ftp/pub/
+getsebool -a | grep ftp
+setsebool -P ftp_home_dir on 
+getsebool -a | grep ftp
+systemctl restart vsftpd
+
+
+
+Client
+=========================
+
+touch upfile{1..5}
+ifconfig
+yum repolist
+yum install ftp -y
+ping xxx.xxx.xxx.xxx   (ftp server ip)
+
+login as anonymous
+======================
+
+ftp xxx.xxx.xxx.xxx   (ftp server ip)
+anonymous
+ftp> help
+ftp> ls
+ftp> cd pub
+ftp> ls
+ftp> cd download
+ftp> ls
+ftp> get vishesh1
+ftp> mget vishesh2  vishesh3   vishesh4       y
+
+ftp> prompt
+ftp> mget vishesh*     (all at a time )
+
+
+ftp> lcd /tmp            ( downloading files at other location )
+ftp> mget vishesh*
+
+ftp> exit
+
+ls /tmp
+ls
+
+Login as user
+=================
+
+ftp xxx.xxx.xxx.xxx   (ftp server ip)
+sansri
+sansri
+
+ftp> help
+ftp> prompt
+ftp> mput upfile*
+
+
+
+
+=============================================================================================================================
+
+
+
+Apache Server Configuration
+=======================================
+
+
+
+Single server configuration
+===========================
+
+ifconfig
+yum repolist
+hostname  (server1.example.com)
+
+vim /etc/hosts
+xxx.xxx.xxx.xxx   server1.example.com
+
+yum install http* -y
+systemctl start httpd
+systemctl enable httpd
+firewall-cmd --permanent --add-services=http
+firewall-cmd --reload
+
+cd /var/www/html/
+ls
+vim index.html
+codes
+
+systemctl restart httpd
+
+firefox
+http://server1.example.com
+
+
+
+
+virtual hosting    /    Multiple server hosting
+===================================================
+
+cd /var/www
+mkdir google yahoo
+cd google/
+echo "This is my local google web page" > google.html
+ls
+cd ..
+cd yahoo/
+echo "This is my local yahoo web page" > yahoo.html
+ls
+
+vim /etc/httpd/conf/httpd.conf
+
+<Virtual Host  xxx.xxx.xxx.xxx:80>
+
+ServerAdmin  root@server1.example.com
+DirectoryRoot  /var/www/google
+DirectoryIndex  google.html
+ServerName google.example.com
+ServerAlias   google.com
+CustomLog  "logs/google_access_log" combined
+ErrorLog  "logs/google_error_log"
+
+</VirtualHost>
+
+<Virtual Host  xxx.xxx.xxx.xxx:80>
+
+ServerAdmin  root@server1.example.com
+DirectoryRoot  /var/www/yahoo
+DirectoryIndex  yahoo.html
+ServerName yahoo.example.com
+ServerAlias   yahoo.com
+CustomLog  "logs/yahoo_access_log" combined
+ErrorLog  "logs/yahoo_error_log"
+
+</VirtualHost>
+
+systemctl restart httpd
+
+vim /etc/hosts
+xxx.xxx.xxx.xxx   server1.example.com
+xxx.xxx.xxx.xxx   google.example.com
+xxx.xxx.xxx.xxx   yahoo.example.com
+
+systemctl restart httpd
+
+
+firefox
+http://google.example.com
+http://yahoo.example.com
+
+
+Port Forwarding
+==================
+
+vim /etc/httpd/conf/httpd.conf
+
+<Virtual Host  xxx.xxx.xxx.xxx:82>
+ServerAdmin  root@server1.example.com
+DirectoryRoot  /var/www/google
+DirectoryIndex  google.html
+ServerName google.example.com
+ServerAlias   google.com
+CustomLog  "logs/google_access_log" combined
+ErrorLog  "logs/google_error_log"
+
+</VirtualHost>
+
+<Virtual Host  xxx.xxx.xxx.xxx:82>
+ServerAdmin  root@server1.example.com
+DirectoryRoot  /var/www/yahoo
+DirectoryIndex  yahoo.html
+ServerName yahoo.example.com
+ServerAlias   yahoo.com
+CustomLog  "logs/yahoo_access_log" combined
+ErrorLog  "logs/yahoo_error_log"
+
+</VirtualHost>
+
+line 42 -  Listen 82  (add this line)
+:se nu
+
+
+systemctl restart httpd
+
+semanage  port  -l  |  grep http                               ( selinux)
+semanage  port  -a  -t  http_port_t    -p   tcp  82
+semanage  port  -l  |  grep http
+systemctl restart httpd
+
+firefox
+http://google.example.com:82
+http://yahoo.example.com:82
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

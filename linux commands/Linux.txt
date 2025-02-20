@@ -1,0 +1,285 @@
+
+1. NFS Server Configuration
+===================================
+
+Server Machine
+================
+
+ifconfig
+ping xxx.xxx.xxx.xxx  (client machine ip )
+
+
+mkdir /nfsserver
+chmod 777 /nfsserver
+
+vim /etc/exports
+/nfsserver *(rw,async) 
+or               
+/nfsserver *(rw,sync)
+or
+/nfsserver 192.168.1.0 (rw,async)
+or
+/nfsserver 192.168.1.200 (rw,async)
+
+ls /nfsserver
+systemctl start nfs-server
+systemctl enable nfs-server
+firewall-cmd --permanent --add-service=nfs
+firewall-cmd --permanent --add-service=rpc-bind
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd --reload
+exportfs -v
+exportfs -r
+showmount -e
+
+
+ls /nfsserver
+
+
+
+Client
+===============
+
+ifconfig
+ping xxx.xxx.xxx.xxx  (nfs server machine ip )
+
+mkdir /garden         ( This will act as mounting point for the /nfsserver directory which is placed on server machine )
+showmount -e xxx.xxx.xxx.xxx ( nfs server machine ip )
+mount xxx.xxx.xxx.xxx:/nfsserver /garden
+( nfs server machine ip )
+
+vim /etc/fstab
+xxx.xxx.xxx.xxx:/nfsserver        /garden      nfs    defaults   0 0              
+( nfs server machine ip )
+
+mount -a
+
+df -TH
+cd /garden
+ls
+mkdir vishesh\ malik{1..20}
+ls
+
+
+
+****************************************************************************************************************************
+
+
+
+2. FTP  Configuration
+==========================================
+
+
+FTP Server
+==============
+
+ifconfig
+yum repolist
+yum install vsftpd*  -y
+systemctl start vsftpd
+systemctl enable vsftpd
+firewall-cmd --permanent --add-service=ftp
+firewall-cmd --reload
+
+cd  /var/ftp/
+ls
+cd pub
+mkdir download
+cd download
+touch vishesh{1..20}
+ls
+cd /
+chmod 777 /var/ftp/pub/
+getsebool -a | grep ftp
+setsebool -P ftp_home_dir on 
+getsebool -a | grep ftp
+systemctl restart vsftpd
+
+
+
+Client
+=========================
+
+touch upfile{1..5}
+ifconfig
+yum repolist
+yum install ftp -y
+ping xxx.xxx.xxx.xxx   (ftp server ip)
+
+login as anonymous
+======================
+
+ftp xxx.xxx.xxx.xxx   (ftp server ip)
+anonymous
+ftp> help
+ftp> ls
+ftp> cd pub
+ftp> ls
+ftp> cd download
+ftp> ls
+ftp> get vishesh1
+ftp> mget vishesh2  vishesh3   vishesh4       y
+
+ftp> prompt
+ftp> mget vishesh*     (all at a time )
+
+
+ftp> lcd /tmp            ( downloading files at other location )
+ftp> mget vishesh*
+
+ftp> exit
+
+ls /tmp
+ls
+
+Login as user
+=================
+
+ftp xxx.xxx.xxx.xxx   (ftp server ip)
+sansri
+sansri
+
+ftp> help
+ftp> prompt
+ftp> mput upfile*
+
+
+
+
+****************************************************************************************************************************
+
+
+3. Apache Server Configuration
+=======================================
+
+
+
+Single server configuration
+===========================
+
+ifconfig
+yum repolist
+hostname  (server1.example.com)
+
+vim /etc/hosts
+xxx.xxx.xxx.xxx   server1.example.com
+
+yum install http* -y
+systemctl start httpd
+systemctl enable httpd
+firewall-cmd --permanent --add-services=http
+firewall-cmd --reload
+
+cd /var/www/html/
+ls
+vim index.html
+codes
+
+systemctl restart httpd
+
+firefox
+http://server1.example.com
+
+
+
+
+virtual hosting    /    Multiple server hosting
+===================================================
+
+cd /var/www
+mkdir google yahoo
+cd google/
+echo "This is my local google web page" > google.html
+ls
+cd ..
+cd yahoo/
+echo "This is my local yahoo web page" > yahoo.html
+ls
+
+vim /etc/httpd/conf/httpd.conf
+
+<Virtual Host  xxx.xxx.xxx.xxx:80>
+
+ServerAdmin  root@server1.example.com
+DirectoryRoot  /var/www/google
+DirectoryIndex  google.html
+ServerName google.example.com
+ServerAlias   google.com
+CustomLog  "logs/google_access_log" combined
+ErrorLog  "logs/google_error_log"
+
+</VirtualHost>
+
+<Virtual Host  xxx.xxx.xxx.xxx:80>
+
+ServerAdmin  root@server1.example.com
+DirectoryRoot  /var/www/yahoo
+DirectoryIndex  yahoo.html
+ServerName yahoo.example.com
+ServerAlias   yahoo.com
+CustomLog  "logs/yahoo_access_log" combined
+ErrorLog  "logs/yahoo_error_log"
+
+</VirtualHost>
+
+systemctl restart httpd
+
+vim /etc/hosts
+xxx.xxx.xxx.xxx   server1.example.com
+xxx.xxx.xxx.xxx   google.example.com
+xxx.xxx.xxx.xxx   yahoo.example.com
+
+systemctl restart httpd
+
+
+firefox
+http://google.example.com
+http://yahoo.example.com
+
+
+***************************************************************************************************************************
+
+
+4. Port Forwarding
+==================
+
+vim /etc/httpd/conf/httpd.conf
+
+<Virtual Host  xxx.xxx.xxx.xxx:82>
+ServerAdmin  root@server1.example.com
+DirectoryRoot  /var/www/google
+DirectoryIndex  google.html
+ServerName google.example.com
+ServerAlias   google.com
+CustomLog  "logs/google_access_log" combined
+ErrorLog  "logs/google_error_log"
+
+</VirtualHost>
+
+<Virtual Host  xxx.xxx.xxx.xxx:82>
+ServerAdmin  root@server1.example.com
+DirectoryRoot  /var/www/yahoo
+DirectoryIndex  yahoo.html
+ServerName yahoo.example.com
+ServerAlias   yahoo.com
+CustomLog  "logs/yahoo_access_log" combined
+ErrorLog  "logs/yahoo_error_log"
+
+</VirtualHost>
+
+line 42 -  Listen 82  (add this line)
+:se nu
+
+
+systemctl restart httpd
+
+semanage  port  -l  |  grep http                               ( selinux)
+semanage  port  -a  -t  http_port_t    -p   tcp  82
+semanage  port  -l  |  grep http
+systemctl restart httpd
+
+firefox
+http://google.example.com:82
+http://yahoo.example.com:82
+
+

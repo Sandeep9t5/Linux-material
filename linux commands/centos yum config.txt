@@ -1,0 +1,29 @@
+
+
+
+
+mkdir /centosdvd
+mkdir /localrepo
+ls /
+lsblk
+mount /dev/sr0  /centosdvd
+lsblk
+cd /centosdvd
+ls
+cp -rf *  /localrepo
+cd
+ls /localrepo
+vim /etc/yum.repos.d/localrepo.repo
+
+[localrepo]
+name=This is my local repository.
+baseurl=file:///localrepo
+enabled=1
+gpgcheck=0
+
+yum clean all
+yum repolist
+yum repolist all
+yum list
+yum list | grep httpd
+
